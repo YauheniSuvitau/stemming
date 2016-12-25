@@ -14,8 +14,8 @@ verb_group1 = r'(ете|ешь|нно|йте|ли|ем|ло|но|ет|ют|ны|
 verb_group1_for_search = r'(а|я)' + verb_group1
 verb_group2 = r'(ейте|уйте|ила|ыла|ена|ите|или|ыли|ило|ыло|ено|ует|уют|ены|ить|ыть|ишь|ей|уй|ил|ыл|им|ым|ен|ят|ит|ыт|ую|ю)$'
 noun = r'(иями|ями|ами|ией|иям|ием|иях|ев|ов|ие|ье|ия|ья|еи|ии|ей|ой|ий|ям|ем|ам|ом|ию|ью|ах|ях|о|у|ы|ь|ю|и|е|й|я|а)$'
-derivation = r'ость|ост$'
-superlative = r'ейше|ейш$'
+derivation = r'(ость|ост)$'
+superlative = r'(ейше|ейш)$'
 def getRvPartOfWord(word):
   res = re.search(vowels + '[а-я]\w*', word)
   if res is not None:
@@ -37,8 +37,7 @@ def findR2(word):
   else:
     return ""
 
-while True:
-  word = input("Enter the word\n").lower()
+def stem(word):
   rv_part = getRvPartOfWord(word)
 
   #step1
@@ -89,7 +88,21 @@ while True:
       word = re.sub(superlative,'',word)
     elif rv_part.endswith('ь'):
       word = word[:-1]
-  print(word)
+  return word
 
+def debug():
+  while True:
+    word = input("Enter the word\n").lower()
+    print(stem(word))
 
+def runWithFile():
+  in_file = open('words.txt', 'r')
+  out_file = open('results.txt', 'w')
+  for word in in_file:
+    word = word[:-1] # delete '\n'
+    result = stem(word)
+    out_file.write(word + ' ' + result +'\n')
+  in_file.close()
+  out_file.close()
 
+runWithFile()
